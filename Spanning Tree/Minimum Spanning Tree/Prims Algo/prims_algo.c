@@ -5,17 +5,34 @@
 
 int minKey(int a[],int checked[]){
      int min=INT_MAX;
+     int m=INT_MAX;
      int i;
      for (i = 0; i < V; i++)
      {
-          if(min>=a[i] && checked[i]==0)
-               min = i;
-               // printf("%d ",min);
+          if(min>=a[i] && checked[i]==0){
+               m = i;
+               min = a[i];
+          }
+          // printf("%d ",min);
+     }
+     return m;
+}
+
+int minValue(int a[],int checked[]){
+     int min=INT_MAX;
+     int i;
+     for (i = 0; i < V; i++)
+     {
+          if(min>=a[i] && checked[i]==0){
+               min = a[i];
+          }
+          // printf("%d ",min);
      }
      return min;
 }
 
 void primMST(int graph[V][V]){
+     int y = 0;
      int A[V];
      int checked[V];
      int mst[V];
@@ -28,29 +45,34 @@ void primMST(int graph[V][V]){
      for (int i = 0; i < V; i++)
      {
           int u = minKey(A,checked);
+          int c = minValue(A,checked);
+          printf("(%d) ",c);
+          mst[y] = c;
+          y++;
           printf("\n----%d-----\n",u);
           checked[u] = 1;
-          int min=INT_MAX;
           int j,min_Index=10;
           for (j = 0; j < V; j++)
           {
-               if(graph[u][j]<min && graph[u][j]!=0){
+               int min=A[j];
+               if(graph[u][j]<min && graph[u][j]!=0 && checked[j]==0){
                     min = graph[u][j];
                     min_Index = j;
+                    A[min_Index] = min;
+                    printf("%d = %d\n",min_Index,min);
                }
           }
-          printf("%d = %d",min_Index,min);
-          A[min_Index] = min;
+     }
+     for (int i = 0; i < V; i++)
+     {
+          printf("%d ",mst[i]);
      }
 }
 
 int main()
 {
-     int graph[V][V] = { { 0, 2, 0, 6, 0 },
-                        { 2, 0, 3, 8, 5 },
-                        { 0, 3, 0, 0, 7 },
-                        { 6, 8, 0, 0, 9 },
-                        { 0, 5, 7, 9, 0 } };
+     int graph[V][V] = { { 0, 2, 0, 6, 0 }, { 2, 0, 3, 8, 5 },
+            { 0, 3, 0, 0, 7 }, { 6, 8, 0, 0, 9 }, { 0, 5, 7, 9, 0 }, };
      primMST(graph);
      return 0;
 }
